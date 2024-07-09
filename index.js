@@ -1,7 +1,7 @@
 
 import inquirer from "inquirer";
 import qr from "qr-image";
-import {writeFile } from "fs";
+import {appendFile, writeFile } from "fs";
 
 
 var user = await inquirer.prompt({
@@ -11,15 +11,14 @@ var user = await inquirer.prompt({
 });
 
 
-const qr_svg = qr.imageSync(user.text, {type: "svg"});
+const qr_svg = qr.imageSync(user.text, {type: 'png'});
 
 
-writeFile('qr_img.svg', qr_svg, (err) => {
-    if (err) throw err;
-    console.log("QR code SVG has been saved successfully!")
-});
-
-writeFile('data.txt', user.text, (err) => {
+// append a text of the url 
+appendFile('data.txt',`${user.text}\n: ${qr_svg}`, (err) => {
     if (err) throw err;
     console.log("Data has been saved successfully!")
 });
+
+// append a url of the qr code to the txt
+
